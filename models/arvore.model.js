@@ -1,5 +1,7 @@
 const conexao = require("../database/connection.database");
-async function getArvore() {
+
+//puxa todos
+async function getarvore() {
   try {
     const [linhas] = await conexao.query(`
             select * from tb_arvore 
@@ -9,7 +11,9 @@ async function getArvore() {
     return erro;
   }
 }
-async function getArvoreById(id) {
+
+//busca os arvore pelos id
+async function getarvoreById(id) {
   try {
     const [linhas] = await conexao.query(
       `
@@ -21,12 +25,17 @@ async function getArvoreById(id) {
     return erro;
   }
 }
-async function addArvore(
+
+//invoca um arvore no banco de dados
+async function addarvore(
   defensivo,
   fertilizante,
   ultima_verif,
   tb_tipo_id,
-  tb_situacao_id
+  tb_situacao_id,
+  linha,
+  coluna,
+  tb_pomar_id
 ) {
   try {
     const [exec] = await conexao.query(
@@ -34,10 +43,16 @@ async function addArvore(
             insert into tb_arvore (  
                 defensivo,
                 fertilizante,
-                ultima_verif,
+                ultima_verificacao,
                 tb_tipo_id,
-                tb_situacao_id
+                tb_situacao_id,
+                linha,
+                coluna,
+                tb_pomar_id
             )values(
+                ?,
+                ?,
+                ?,
                 ?,
                 ?,
                 ?,
@@ -45,7 +60,7 @@ async function addArvore(
                 ?
             )
             `,
-      [defensivo, fertilizante, ultima_verif, tb_tipo_id, tb_situacao_id]
+      [defensivo, fertilizante, ultima_verif, tb_tipo_id, tb_situacao_id,linha,coluna,tb_pomar_id]
     );
     return exec.affectedRows;
   } catch (erro) {
@@ -53,13 +68,15 @@ async function addArvore(
   }
 }
 
-async function buscaTodosArvore() {
+//função para buscar todos os usuários do banco
+async function buscaTodosarvore() {
+  //estrutura de tentativa try..catch para capturar erros
   try {
     let [linhas] = await conexao.query(`
             select 
                 if(a.defensivo=1,'Sim','Não') as defensivo,
                 if(a.fertilizante=1,'Sim','Não') as fertilizante,
-                a.ultima_verif,
+                a.ultima_verificacao,
                 a.tb_tipo_id as id_tipo,
                 t.descricao as ds_tipo,
                 a.tb_situacao_id as id_situacao,
@@ -68,15 +85,17 @@ async function buscaTodosArvore() {
                 inner join tb_tipo t on t.id = a.tb_tipo_id
                 inner join tb_situacao s on s.id = a.tb_situacao_id
             `);
+    //retorna valores buscados no banco
     return linhas;
   } catch (e) {
+    //retorna o erro que aconteceu
     return e;
   }
 }
 
 module.exports = {
-  getArvore,
-  getArvoreById,
-  addArvore,
-  buscaTodosArvore,
+  getarvore,
+  getarvoreById,
+  addarvore,
+  buscaTodosarvore,
 };

@@ -9,36 +9,40 @@ var cors = require('cors');
 dotenv.config();
 
 var app = express();
-//Configuração do CORS
+// configuração do CORS
+
 app.use(cors({origin:['http://localhost:4200','http://127.0.0.1:4200']}))
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/usuario.route');
 var materialRouter = require('./routes/material.route');
 var produtoRouter = require('./routes/produto.route');
-var pomarcadRouter = require('./routes/pomarcad.route');
+var pomarcadRouter = require('./routes/pomarcad.route')
 var movimentoRouter = require('./routes/movimento.route')
-var colheitaRouter = require('/routes/colheita.route');
-var arvoreRouter = require('/routes/arvore.route')
+var arvoreRouter = require('./routes/arvore.route')
+var colheitaRouter = require('./routes/colheita.route')
+var homeRouter = require('./routes/home.route')
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/', indexRouter);
 app.use('/usuario', usersRouter);
 app.use('/material',materialRouter);
 app.use('/produto',produtoRouter);
 app.use('/pomarcad',pomarcadRouter);
 app.use('/movimento',movimentoRouter);
-app.use('/colheita',colheitaRouter);
-app.use('/arvore',arvoreRouter)
-
+app.use('/arvore', arvoreRouter)
+app.use('/colheita',colheitaRouter)
+app.use('/home',homeRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -54,4 +58,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 module.exports = app;

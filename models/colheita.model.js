@@ -1,5 +1,7 @@
 const conexao = require('../database/connection.database');
-async function getColheita(){
+
+//puxa todos
+async function getcolheita(){
     try{
         const[linhas] = await conexao.query(`
             select * from tb_colheita
@@ -9,7 +11,9 @@ async function getColheita(){
         return erro;
     }
 }
-async function getColheitaById(id){
+
+//busca os colheita pelos id
+async function getcolheitaById(id){
     try{
         const[linhas] = await conexao.query(`
             select * from tb_colheita where id = ?
@@ -19,40 +23,56 @@ async function getColheitaById(id){
         return erro;
     }
 }
-async function addColheita( 
-    dt_colheita,
-    tb_arvore_id){ try{
+
+//invoca um colheita no banco de dados
+async function addcolheita(
+            quantidade, 
+            dt_colheita,
+            tb_arvore_id
+){ try{
         const[exec] = await conexao.query(`
-            insert into tb_colheita (  
+            insert into tb_colheita ( 
+                quantidade,
                 dt_colheita,
                 tb_arvore_id
             )values(
                 ?,
+                ?,
                 ?
             )
-            `,[  dt_moviment,td_tipo_id])
+            `,[  quantidade,dt_colheita,tb_arvore_id])
             return exec.affectedRows;
     }catch(erro){
         return erro;
     }
+
 }
-async function buscaTodosColheita(){
+
+//função para buscar todos os usuários do banco
+async function buscaTodoscolheita(){
+    //estrutura de tentativa try..catch para capturar erros
     try{
         let [linhas] = await conexao.query(`
             select 
           	    u.id,
+                u.quantidade,
                 u.dt_colheita,
                 u.tb_arvore_id
              from tb_colheita  u;
             `)
+            //retorna valores buscados no banco
             return linhas;
     }catch(e){
+        //retorna o erro que aconteceu
         return e;
     }
 }
+
+
+
 module.exports = {
-     getColheita,
-     getColheitaById,
-     addColheita,
-     buscaTodosColheita
+     getcolheita,
+     getcolheitaById,
+     addcolheita,
+     buscaTodoscolheita
 };

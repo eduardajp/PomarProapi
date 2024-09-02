@@ -6,9 +6,9 @@ router.post('/add',(req,res)=>{
   let dados = req.body.info;
   console.log(dados);
   sql.addMovimento(
-    dados.quantidade,
+    dados.tipo,
     dados.produto,
-    dados.tb_mov_item,
+    dados.quantidade,
   ).then((resposta)=>{
     if(resposta instanceof Error){
       res.status(500).json(resposta);

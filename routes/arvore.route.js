@@ -2,15 +2,21 @@ var express = require('express');
 var router = express.Router();
 const sql = require('../models/arvore.model');
 
+
+
 router.post('/add',(req,res)=>{
+    //guarda as informações em uma variavel para facilitar o acesso
     let dados = req.body.info;
   console.log(dados)
-    sql.addArvore(
+    sql.addarvore(
       dados.defensivo,
       dados.fertilizante,
       dados.ultima_verif,
       dados.tb_tipo_id,
-      dados.tb_situacao_id
+      dados.tb_situacao_id,
+      dados.linha,
+      dados.coluna,
+      dados.pomar
     ).then((resposta)=>{
       if(resposta instanceof Error){
         res.status(500).json(resposta);
@@ -19,9 +25,13 @@ router.post('/add',(req,res)=>{
       res.status(201).json(resposta);
   
     })
+    
   })
+
+
+
   router.get('/buscaTodos',(req,res)=>{
-    sql.buscaTodosArvore().then((resposta)=>{
+    sql.buscaTodosarvore().then((resposta)=>{
       if(resposta instanceof Error){
         res.status(500).json(resposta);
         return;
@@ -29,4 +39,12 @@ router.post('/add',(req,res)=>{
       res.status(200).json(resposta);
     })
 })
+
+
+
+
+
+
+
+
 module.exports = router;

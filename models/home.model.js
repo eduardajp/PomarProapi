@@ -13,7 +13,7 @@ async function buscaTodoshome(){
     p.descricao as p_descricao
  from tb_movimentacao m
 	inner join mov_item mi 
-    inner join tb_produtos p
+    inner join tb_produto p
     inner join tb_tipo t
 where 1=1
 	and t.descricao = 'entrada'
@@ -40,7 +40,7 @@ async function buscaTodoshomeS(){
     p.descricao as p_descricao
  from tb_movimentacao m
 	inner join mov_item mi 
-    inner join tb_produtos p
+    inner join tb_produto p
     inner join tb_tipo t
 where 1=1
 	and t.descricao = 'saida'
